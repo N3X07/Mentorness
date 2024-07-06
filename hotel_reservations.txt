@@ -1,0 +1,57 @@
+CREATE DATABASE hotel_reservations_db;
+USE hotel_reservations_db;
+CREATE TABLE hotel_reservations (
+    Booking_ID INT PRIMARY KEY,
+    no_of_adults INT,
+    no_of_children INT,
+    no_of_weekend_nights INT,
+    no_of_week_nights INT,
+    type_of_meal_plan VARCHAR(50),
+    room_type_reserved VARCHAR(50),
+    lead_time INT,
+    arrival_date DATE,
+    market_segment_type VARCHAR(50),
+    avg_price_per_room DECIMAL(10, 2),
+    booking_status VARCHAR(50)
+);
+INSERT INTO hotel_reservations (Booking_ID, no_of_adults, no_of_children, no_of_weekend_nights, no_of_week_nights, type_of_meal_plan, room_type_reserved, lead_time, arrival_date, market_segment_type, avg_price_per_room, booking_status)
+VALUES
+(1, 2, 0, 1, 2, 'Breakfast', 'Deluxe', 10, '2024-01-01', 'Online', 120.50, 'Confirmed'),
+(2, 2, 1, 2, 3, 'Full board', 'Suite', 20, '2024-01-05', 'Corporate', 200.00, 'Canceled'),
+(3, 1, 2, 0, 2, 'Half board', 'Standard', 5, '2024-01-10', 'Direct', 80.00, 'Confirmed'),
+(4, 3, 1, 3, 4, 'Breakfast', 'Standard', 15, '2024-02-14', 'Online', 100.00, 'Confirmed'),
+(5, 2, 2, 1, 1, 'No meal', 'Deluxe', 30, '2024-03-20', 'Corporate', 150.00, 'Confirmed'),
+(6, 4, 0, 2, 5, 'Full board', 'Suite', 7, '2024-04-10', 'Direct', 250.00, 'Confirmed'),
+(7, 1, 0, 0, 3, 'Breakfast', 'Standard', 10, '2024-05-12', 'Online', 90.00, 'Canceled'),
+(8, 2, 2, 2, 2, 'Half board', 'Suite', 25, '2024-06-15', 'Corporate', 210.00, 'Confirmed');
+
+
+SELECT COUNT(*) AS total_reservations FROM hotel_reservations;
+
+SELECT type_of_meal_plan, COUNT(*) AS count FROM hotel_reservations GROUP BY type_of_meal_plan ORDER BY count DESC LIMIT 1;
+
+SELECT AVG(avg_price_per_room) AS average_price FROM hotel_reservations WHERE no_of_children > 0;
+
+SELECT COUNT(*) AS reservations_2024 FROM hotel_reservations WHERE YEAR(arrival_date) = 2024;
+
+SELECT room_type_reserved, COUNT(*) AS count FROM hotel_reservations GROUP BY room_type_reserved ORDER BY count DESC LIMIT 1;
+
+SELECT COUNT(*) AS weekend_reservations FROM hotel_reservations WHERE no_of_weekend_nights > 0;
+
+SELECT MAX(lead_time) AS highest_lead_time, MIN(lead_time) AS lowest_lead_time FROM hotel_reservations;
+
+SELECT market_segment_type, COUNT(*) AS count FROM hotel_reservations GROUP BY market_segment_type ORDER BY count DESC LIMIT 1;
+
+SELECT COUNT(*) AS confirmed_reservations FROM hotel_reservations WHERE booking_status = 'Confirmed';
+
+SELECT SUM(no_of_adults) AS total_adults, SUM(no_of_children) AS total_children FROM hotel_reservations;
+
+SELECT AVG(no_of_weekend_nights) AS average_weekend_nights FROM hotel_reservations WHERE no_of_children > 0;
+
+SELECT MONTH(arrival_date) AS month, COUNT(*) AS count FROM hotel_reservations GROUP BY MONTH(arrival_date) ORDER BY month;
+
+SELECT room_type_reserved, AVG(no_of_weekend_nights + no_of_week_nights) AS average_nights FROM hotel_reservations GROUP BY room_type_reserved;
+
+SELECT room_type_reserved, COUNT(*) AS count, AVG(avg_price_per_room) AS average_price FROM hotel_reservations WHERE no_of_children > 0 GROUP BY room_type_reserved ORDER BY count DESC LIMIT 1;
+
+SELECT market_segment_type, AVG(avg_price_per_room) AS average_price FROM hotel_reservations GROUP BY market_segment_type ORDER BY average_price DESC LIMIT 1;
